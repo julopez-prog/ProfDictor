@@ -913,7 +913,6 @@
 
   /**
    * The Search Class card — never Active Enlistment (Finalized / Status/Action).
-   * Adapted from an earlier implementation's sectionRoot + searchClassScope.
    */
   function searchClassScope() {
     for (const el of document.querySelectorAll("h1,h2,h3,h4,h5,legend,th,.v-toolbar__title,div,span")) {

@@ -8,12 +8,11 @@ meanwhile, have all of that *plus* the professor. Profdictor scans those past
 semesters, learns who teaches which slot, and ranks the likely professor for each
 TBA section of the semester you care about.
 
-Sibling project to **an earlier implementation**, and it reuses its architecture: MV3
-extension, a page bridge into the AMIS Nuxt app, a floating in-page panel, and an
-optional Cloudflare Worker for one-time access hashes.
+It uses an MV3 extension, a page bridge into the AMIS Nuxt app, a floating
+in-page panel, and an optional Cloudflare Worker for one-time access hashes.
 
-Unlike an earlier implementation, Profdictor is **read-only**. It only issues `GET`
-requests. It cannot bookmark, enlist, or change anything in your records.
+Profdictor is **read-only**. It only issues `GET` requests. It cannot bookmark,
+enlist, or change anything in your records.
 
 ---
 
@@ -158,7 +157,7 @@ changes, so it is cached forever; a semester that came back all-TBA gets a
 
 ---
 
-### How the prediction works
+### How the prediction works 
 
 With roughly nine semesters of history this is a small-data problem, so the
 design leans on interpretable structure rather than model size.
@@ -304,8 +303,8 @@ tools/                 test runner, self-tests, credential generator
 ## Known limitations
 
 **The AMIS instructor field name is unverified.** This was built without a live
-AMIS session, and an earlier implementation never read instructor names, so there was no
-known-good field path to copy. Rather than hard-code a guess, `scanner.js`
+AMIS session, so there was no known-good field path to copy. Rather than
+hard-code a guess, `scanner.js`
 *searches* each payload for instructor-ish keys (`instructor`, `faculty`,
 `professor`, `instructor_name`, `handled_by`, …), resolves nested objects,
 arrays, and split `first_name`/`last_name` fields, and records **which key path
