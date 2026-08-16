@@ -18,6 +18,9 @@ Enjoy using this tool!!
 
 ---
 
+
+HAVE FUN !!!
+
 ## The key insight
 
 AMIS is a Nuxt/Vue front end talking to a JSON API, and the class-offerings
