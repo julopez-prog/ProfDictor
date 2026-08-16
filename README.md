@@ -14,6 +14,8 @@ in-page panel, and an optional Cloudflare Worker for one-time access hashes.
 Profdictor is **read-only**. It only issues `GET` requests. It cannot bookmark,
 enlist, or change anything in your records.
 
+Enjoy using this tool!!
+
 ---
 
 ## The key insight
