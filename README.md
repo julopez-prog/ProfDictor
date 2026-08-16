@@ -1,4 +1,4 @@
-# Profdictor
+# ProfDictor
 
 Predicts the professor behind a **TBA** section on UPLB AMIS.
 
