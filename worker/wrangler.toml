@@ -1,0 +1,13 @@
+name = "profdictor-registry"
+main = "worker.js"
+compatibility_date = "2026-01-01"
+
+# Create the namespace first, then paste its id here:
+#   npx wrangler kv namespace create PD_KV
+[[kv_namespaces]]
+binding = "PD_KV"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+# CLAIM_KEY is a secret, not a var. Set it with:
+#   npx wrangler secret put CLAIM_KEY
+# Leaving it unset makes the registry open to anyone who knows the URL.

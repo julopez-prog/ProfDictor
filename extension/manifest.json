@@ -1,0 +1,61 @@
+{
+  "manifest_version": 3,
+  "name": "Profdictor",
+  "version": "1.6.0",
+  "description": "Predicts TBA professors on AMIS by scanning past semesters where instructors were revealed, then ranking likely profs per section.",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "permissions": ["storage", "scripting", "activeTab", "tabs", "unlimitedStorage"],
+  "host_permissions": [
+    "*://amis.uplb.edu.ph/*",
+    "*://*.uplb.edu.ph/*",
+    "*://api-amis.uplb.edu.ph/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Profdictor",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://amis.uplb.edu.ph/*", "*://*.uplb.edu.ph/*"],
+      "js": ["early-inject.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["*://amis.uplb.edu.ph/*", "*://*.uplb.edu.ph/*"],
+      "js": [
+        "lib/terms.js",
+        "lib/names.js",
+        "lib/forest.js",
+        "lib/features.js",
+        "lib/predict.js",
+        "lib/db.js",
+        "scanner.js",
+        "content.js"
+      ],
+      "css": ["panel.css"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-bridge.js", "panel.css", "icon128.png"],
+      "matches": ["*://amis.uplb.edu.ph/*", "*://*.uplb.edu.ph/*"]
+    }
+  ]
+}

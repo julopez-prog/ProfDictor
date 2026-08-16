@@ -1,0 +1,8 @@
+# Generated access passphrases and moderator credentials - never commit these.
+secrets/
+
+node_modules/
+.wrangler/
+*.log
+Thumbs.db
+.DS_Store

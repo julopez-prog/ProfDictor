@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Profdictor — Moderator</title>
+    <style>
+      :root {
+        --maroon: #7a1028;
+        --maroon-dark: #5c0c1e;
+        --amber: #c45c00;
+        --line: #e5d0d5;
+        --dim: #6b6b6b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        margin: 0;
+        background: #f6f1f2;
+        color: #1a1a1a;
+      }
+      header {
+        background: linear-gradient(180deg, var(--maroon), var(--maroon-dark));
+        color: #fff;
+        padding: 16px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 20px;
+        letter-spacing: 0.02em;
+      }
+      header .sub {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-top: 2px;
+      }
+      .accent {
+        color: #ffd08a;
+      }
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 20px 24px 60px;
+        display: grid;
+        gap: 16px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .card h2 {
+        margin: 0 0 12px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--maroon);
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: 2fr 1.4fr auto auto;
+        gap: 10px;
+        align-items: end;
+      }
+      label {
+        display: grid;
+        gap: 4px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      input,
+      select {
+        padding: 8px 9px;
+        border: 1px solid #c9c9c9;
+        border-radius: 5px;
+        font-size: 13px;
+        font-family: inherit;
+      }
+      button {
+        border: 0;
+        border-radius: 5px;
+        padding: 9px 14px;
+        font-weight: 700;
+        font-size: 12px;
+        cursor: pointer;
+        color: #fff;
+        background: var(--maroon);
+        font-family: inherit;
+      }
+      button.secondary {
+        background: #1565c0;
+      }
+      button.ghost {
+        background: #fff;
+        color: var(--maroon);
+        border: 1px solid var(--maroon);
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+      th {
+        text-align: left;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--dim);
+        border-bottom: 2px solid var(--line);
+        padding: 6px 8px;
+      }
+      td {
+        border-bottom: 1px solid #f0e6e8;
+        padding: 7px 8px;
+        vertical-align: middle;
+      }
+      tr.verified td {
+        background: #f2fbf5;
+      }
+      tr.tba .cur {
+        color: var(--amber);
+        font-weight: 700;
+      }
+      td.sec {
+        font-weight: 800;
+        color: var(--maroon);
+        white-space: nowrap;
+      }
+      td.sched {
+        font-size: 11px;
+        color: var(--dim);
+        white-space: nowrap;
+      }
+      td.act {
+        white-space: nowrap;
+      }
+      .name-input {
+        width: 100%;
+        min-width: 190px;
+      }
+      .sugg {
+        font-size: 11px;
+        color: #0a5c33;
+        margin-top: 3px;
+      }
+      .sugg b {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .tag {
+        display: inline-block;
+        background: #0f8a4b;
+        color: #fff;
+        border-radius: 8px;
+        padding: 1px 7px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      #msg {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 9px 12px;
+        border-radius: 6px;
+        background: #f4f4f4;
+        min-height: 20px;
+      }
+      #msg.ok {
+        background: #e8f7ee;
+        color: #0a5c33;
+      }
+      #msg.err {
+        background: #fdecea;
+        color: #8a1c14;
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--dim);
+        line-height: 1.5;
+      }
+      .row-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      #locked {
+        max-width: 520px;
+        margin: 80px auto;
+        text-align: center;
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1><span class="accent">P</span>rof<span class="accent">d</span>ictor — Moderator</h1>
+        <div class="sub" id="who">checking session…</div>
+      </div>
+      <button id="logout" class="ghost" type="button">Sign out</button>
+    </header>
+
+    <div id="locked" hidden>
+      <div class="card">
+        <h2>Not signed in</h2>
+        <p class="hint">
+          Open the Profdictor popup and type your moderator hash into the
+          <b>Semester to predict</b> field, then press <b>Open moderator page</b>.
+        </p>
+      </div>
+    </div>
+
+    <main id="app" hidden>
+      <div class="card">
+        <h2>Pick what to verify</h2>
+        <div class="controls">
+          <label>
+            Subject
+            <input id="course" list="course-list" placeholder="ARTS 1" />
+            <datalist id="course-list"></datalist>
+          </label>
+          <label>
+            Semester
+            <select id="term"></select>
+          </label>
+          <button id="load" type="button">Load sections</button>
+          <button id="onlyTba" class="ghost" type="button">Show TBA only</button>
+        </div>
+        <p class="hint" style="margin-bottom: 0">
+          Saving writes the professor to the local dataset for that exact subject, semester and
+          section. Verified rows override whatever AMIS showed and are weighted heavily by the model.
+        </p>
+      </div>
+
+      <div id="msg">Pick a subject and semester, then load its sections.</div>
+
+      <div class="card">
+        <h2>Sections</h2>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 90px">Section</th>
+              <th style="width: 190px">Schedule</th>
+              <th style="width: 180px">AMIS shows</th>
+              <th>Actual professor</th>
+              <th style="width: 150px">Action</th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <tr>
+              <td colspan="5" class="hint">Nothing loaded yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>Shared registry</h2>
+        <div class="row-actions">
+          <button id="pull" class="secondary" type="button">Pull verified from registry</button>
+          <button id="push" class="secondary" type="button">Push my verifications</button>
+          <button id="export" class="ghost" type="button">Export dataset JSON</button>
+          <button id="import" class="ghost" type="button">Import dataset JSON</button>
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </div>
+        <p class="hint" id="registry-state" style="margin-bottom: 0"></p>
+      </div>
+    </main>
+
+    <script src="lib/terms.js"></script>
+    <script src="lib/names.js"></script>
+    <script src="lib/forest.js"></script>
+    <script src="lib/features.js"></script>
+    <script src="lib/predict.js"></script>
+    <script src="lib/db.js"></script>
+    <script src="moderator.js"></script>
+  </body>
+</html>

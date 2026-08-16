@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Profdictor</title>
+    <style>
+      :root {
+        --maroon: #7a1028;
+        --amber: #c45c00;
+        --ink: #1a1a1a;
+        --line: #ccc;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        margin: 0;
+        width: 420px;
+        color: var(--ink);
+      }
+      header {
+        background: var(--maroon);
+        color: #fff;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        background: #fff;
+        color: var(--maroon);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 19px;
+        flex-shrink: 0;
+        letter-spacing: -0.04em;
+      }
+      .brand {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        line-height: 1.15;
+      }
+      .brand strong {
+        font-size: 16px;
+        letter-spacing: 0.03em;
+      }
+      .brand span {
+        font-size: 11px;
+        font-weight: 600;
+        opacity: 0.9;
+      }
+      main,
+      #gate {
+        padding: 12px;
+        display: grid;
+        gap: 9px;
+      }
+      #gate[hidden],
+      #app[hidden],
+      [hidden] {
+        display: none !important;
+      }
+      label {
+        display: grid;
+        gap: 3px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      input,
+      select,
+      button {
+        font-family: inherit;
+      }
+      input,
+      select {
+        padding: 7px 8px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      input:focus,
+      select:focus {
+        outline: 2px solid rgba(122, 16, 40, 0.35);
+        outline-offset: -1px;
+      }
+      #course {
+        font-size: 15px;
+        font-weight: 700;
+        padding: 9px 10px;
+        letter-spacing: 0.02em;
+      }
+      #term {
+        font-size: 15px;
+        font-weight: 700;
+        padding: 9px 10px;
+        letter-spacing: 0.06em;
+      }
+      #term.admin {
+        border-color: var(--amber);
+        background: #fff8f0;
+        letter-spacing: normal;
+        font-size: 12px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+      button {
+        border: 0;
+        border-radius: 4px;
+        padding: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 12px;
+        color: #fff;
+        background: #555;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      #predict {
+        background: #0f8a4b;
+        grid-column: 1 / -1;
+        font-size: 13px;
+      }
+      #rescan {
+        background: #1565c0;
+      }
+      #wipe {
+        background: #b42318;
+      }
+      #gate-unlock,
+      #modlogin {
+        background: var(--maroon);
+      }
+      #modlogin {
+        grid-column: 1 / -1;
+      }
+      #status {
+        background: #f4f4f4;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 11px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        min-height: 54px;
+      }
+      #status.ok {
+        background: #e8f7ee;
+      }
+      #status.err {
+        background: #fdecea;
+      }
+      #status.busy {
+        background: #fff8e1;
+      }
+      .hint {
+        font-size: 11px;
+        color: #555;
+        line-height: 1.4;
+      }
+      code {
+        font-size: 10px;
+        background: #eee;
+        padding: 1px 4px;
+        border-radius: 3px;
+      }
+      fieldset {
+        border: 1px solid #e5d0d5;
+        border-radius: 6px;
+        padding: 9px;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+      }
+      legend {
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--maroon);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0 4px;
+      }
+      details summary {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--maroon);
+        cursor: pointer;
+        padding: 2px 0;
+      }
+      details[open] {
+        display: grid;
+        gap: 8px;
+      }
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .check input {
+        width: auto;
+        margin: 0;
+      }
+      #reset-padder {
+        background: #6b3a46;
+      }
+      #identify-results {
+        display: grid;
+        gap: 4px;
+        font-size: 11px;
+      }
+      .match {
+        border: 1px solid #e5d0d5;
+        border-left: 3px solid var(--maroon);
+        border-radius: 4px;
+        padding: 5px 7px;
+        background: #fffafb;
+      }
+      .match b {
+        font-size: 12px;
+      }
+      .match .meta {
+        color: #666;
+        font-size: 10px;
+      }
+      .badge {
+        display: inline-block;
+        background: var(--maroon);
+        color: #fff;
+        border-radius: 8px;
+        padding: 1px 6px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      #dataset {
+        font-size: 10px;
+        color: #555;
+        line-height: 1.4;
+      }
+      h2 {
+        margin: 0;
+        font-size: 16px;
+        color: var(--maroon);
+      }
+      #gate-msg {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--maroon);
+        min-height: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Pd</div>
+      <div class="brand">
+        <strong>
+          <span style="color: #ffd08a">P</span>rof<span style="color: #ffd08a">d</span>ictor
+        </strong>
+        <span id="version">predict TBA professors</span>
+      </div>
+    </header>
+
+    <div id="gate" hidden>
+      <h2>Unlock Profdictor</h2>
+      <p class="hint">
+        Enter your username and the one-time access hash you were given. Each hash works once, on
+        any browser or PC.
+      </p>
+      <label>
+        Username
+        <input id="gate-user" type="text" maxlength="32" placeholder="e.g. Jose" autocomplete="username" />
+      </label>
+      <label>
+        One-time hash
+        <input id="gate-code" type="password" maxlength="80" placeholder="paste your hash" autocomplete="off" />
+      </label>
+      <button id="gate-unlock" type="button">Unlock</button>
+      <div id="gate-msg"></div>
+    </div>
+
+    <main id="app" hidden>
+      <label>
+        Subject to predict
+        <input id="course" type="text" placeholder="ARTS 1" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <label>
+        Semester to predict
+        <input
+          id="term"
+          type="text"
+          placeholder="1261"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="80"
+        />
+      </label>
+      <div class="hint" id="term-hint">
+        <code>12<b>Y</b><b>S</b></code> &mdash; Y: 3='23-24, 4='24-25, 5='25-26, 6='26-27 &nbsp;&middot;&nbsp; S:
+        1=First, 2=Second, 3=Midyear
+      </div>
+
+      <label>
+        Specific section
+        <input
+          id="sectionFilter"
+          type="text"
+          placeholder="ALL"
+          autocomplete="off"
+          spellcheck="false"
+          maxlength="26"
+        />
+      </label>
+      <div class="hint" id="section-hint">
+        Letters only (A–Z). <b>B</b> predicts B, B1, B2… &nbsp;&middot;&nbsp; <b>ALL</b> scans and predicts every
+        section
+      </div>
+
+      <label>
+        Focus
+        <select id="focus">
+          <option value="top1">Top 1 — best single guess</option>
+          <option value="top3">Top 3 — real name in the first three</option>
+          <option value="topn" selected>Top N — real name anywhere on the card</option>
+        </select>
+      </label>
+      <div class="hint" id="focus-hint">
+        Top N uses <b>Max profs</b> as N. The first 5 names are the shortlist (target 50%+). Lecture/lab lists appear only when the course has both.
+      </div>
+
+      <div class="row">
+        <label>
+          Max profs per section
+          <input id="limit" type="number" min="1" max="20" value="5" />
+        </label>
+        <label>
+          Scan back to
+          <select id="floor">
+            <option value="1231">1231 ('23-24 1st)</option>
+            <option value="1211">1211 ('21-22 1st)</option>
+            <option value="1241">1241 ('24-25 1st)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="predict" type="button">Scan past semesters &amp; predict</button>
+        <button id="rescan" type="button">Force rescan</button>
+        <button id="wipe" type="button">Clear this course</button>
+        <button id="modlogin" type="button" hidden>Open moderator page</button>
+      </div>
+
+      <div id="status">Open the AMIS enrollment page, then hit predict.</div>
+
+      <fieldset>
+        <legend>Who is the actual prof of this section?</legend>
+        <div class="row">
+          <label>
+            Section
+            <input id="id-section" type="text" placeholder="S1" autocomplete="off" />
+          </label>
+          <label>
+            Prof name (typos ok)
+            <input id="id-name" type="text" placeholder="delacruz" autocomplete="off" />
+          </label>
+        </div>
+        <button id="identify" type="button" style="background: #1565c0">Match against scanned profs</button>
+        <div id="identify-results"></div>
+      </fieldset>
+
+      <details>
+        <summary>Advanced</summary>
+        <div class="row">
+          <label>
+            Scan mode
+            <select id="mode">
+              <option value="dom" selected>DOM (page scrape)</option>
+              <option value="api">API (optional)</option>
+            </select>
+          </label>
+          <label>
+            Recency half-life
+            <input id="halfLife" type="number" min="1" max="12" value="4" />
+          </label>
+        </div>
+        <label>
+          Request throttle (ms)
+          <input id="throttle" type="number" min="0" max="5000" value="80" />
+        </label>
+        <div class="hint">
+          Half-life is in semesters: 4 means a class two academic years ago counts half as much as
+          last semester. <b>6 usually scores a better top-5</b> — on Top N the model now widens it
+          automatically when the shortlist backtests under 50%. Throttle spaces out requests so the
+          AMIS server is not hammered.
+        </div>
+
+        <fieldset>
+          <legend>Padder</legend>
+          <div class="hint">
+            These are the live experiment knobs (shipped defaults shown). Change them, predict, then
+            compare the ground-truth strip. <b>Reset</b> puts the current extension values back.
+          </div>
+          <div class="row">
+            <label>
+              Vote pad
+              <input id="votePad" type="number" min="0" max="8" step="0.5" value="1" />
+            </label>
+            <label>
+              Vote depth
+              <input id="voteDepth" type="number" min="0" max="20" value="0" />
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              Vote mix (%)
+              <input id="voteMix" type="number" min="0" max="100" step="5" value="40" />
+            </label>
+            <label>
+              Vote floor
+              <input id="voteFloor" type="number" min="0" max="1" step="0.01" value="0.02" />
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              Cross-section ×
+              <input id="crossPrior" type="number" min="0" max="20" step="0.5" value="5" />
+            </label>
+            <label>
+              Timetable
+              <select id="lineup">
+                <option value="auto" selected>Auto (only if it helps)</option>
+                <option value="off">Off</option>
+                <option value="always">Always on</option>
+              </select>
+            </label>
+          </div>
+          <label class="check">
+            <input id="tuneWeights" type="checkbox" checked />
+            Tune model weights on past semesters
+          </label>
+          <div class="hint">
+            <b>Pad</b> is points the last name in the depth still gets (#1 gets depth+pad).
+            <b>Depth</b> is how many names each model ranks; 0 keeps the vote on the first 5 so a long Top-N list does not scramble the shortlist.
+            <b>Mix</b> is how hard those ballots pull the blend (40 = current).
+            <b>Floor</b> drops models below that weight from the vote (stops 8/25 padding).
+            <b>Cross-section ×</b> is the neighbour/bundle prior (5 = current).
+            Focus on the main screen picks the target (top 1 / 3 / N) and fills these for you.
+          </div>
+          <button id="reset-padder" type="button">Reset padder to shipped defaults</button>
+        </fieldset>
+
+        <div id="dataset">Dataset: loading…</div>
+      </details>
+
+      <div class="hint">
+        Percentages are per-section posteriors from an ensemble (recency-weighted heuristic +
+        logistic regression + random forest), calibrated against backtests on real past semesters.
+        Enter an already-revealed term such as <code>1251</code> to see measured accuracy.
+      </div>
+    </main>
+
+    <script src="lib/terms.js"></script>
+    <script src="lib/names.js"></script>
+    <script src="lib/features.js"></script>
+    <script src="lib/db.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
