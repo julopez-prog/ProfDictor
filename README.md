@@ -158,7 +158,7 @@ changes, so it is cached forever; a semester that came back all-TBA gets a
 
 ---
 
-## How the prediction works
+### How the prediction works
 
 With roughly nine semesters of history this is a small-data problem, so the
 design leans on interpretable structure rather than model size.
